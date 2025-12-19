@@ -1,28 +1,26 @@
 using UnityEngine;
 
 /// <summary>
-/// Bat-Signal moves smoothly in X and Y (oscillation)
+/// کنترل Bat-Signal: روشن/خاموش و چرخش ساده
 /// </summary>
 public class BatSignalController : MonoBehaviour
 {
     public KeyCode toggleKey = KeyCode.B;
-    public Vector2 moveAmount = new Vector2(1f, 0.5f); // مقدار حرکت در X و Y
-    public float moveSpeed = 1f; // سرعت حرکت
-
     private SpriteRenderer spriteRenderer;
-    private Vector3 startPosition;
+
+    [Header("Rotation Settings")]
+    public float rotationSpeed = 10f;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = false; // ابتدا خاموش
-        startPosition = transform.position;
     }
 
     void Update()
     {
         HandleToggle();
-        MoveSignal();
+        RotateSignal();
     }
 
     void HandleToggle()
@@ -31,13 +29,9 @@ public class BatSignalController : MonoBehaviour
             spriteRenderer.enabled = !spriteRenderer.enabled;
     }
 
-    void MoveSignal()
+    void RotateSignal()
     {
-        if(!spriteRenderer.enabled) return;
-
-        float offsetX = Mathf.Sin(Time.time * moveSpeed) * moveAmount.x;
-        float offsetY = Mathf.Cos(Time.time * moveSpeed) * moveAmount.y;
-
-        transform.position = startPosition + new Vector3(offsetX, offsetY, 0f);
+        if (spriteRenderer.enabled)
+            transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
     }
 }
